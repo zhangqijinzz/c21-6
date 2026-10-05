@@ -1873,6 +1873,41 @@ button:disabled {
 .delta-bad {
   color: #bd7765;
 }
+.compare-export {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  max-width: 850px;
+  margin: -6px auto 19px;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.compare-export > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  min-width: 240px;
+  color: #8b968d;
+  font-size: 9px;
+  line-height: 1.6;
+}
+.compare-export > span svg {
+  flex-shrink: 0;
+  color: #75974c;
+}
+.heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.export-control {
+  margin-left: 0;
+}
 .snapshot-list {
   background: #fff;
   border: 1px solid var(--line);
@@ -2359,6 +2394,13 @@ button:disabled {
     line-height: 1.5;
   }
   .module-heading > .button {
+    padding: 0 9px;
+    white-space: nowrap;
+  }
+  .heading-actions {
+    flex-shrink: 0;
+  }
+  .heading-actions .button {
     padding: 0 9px;
     white-space: nowrap;
   }

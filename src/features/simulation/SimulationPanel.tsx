@@ -1,7 +1,9 @@
+import { useState } from "react";
 import {
   Activity,
   ArrowDownUp,
   CircleHelp,
+  FileDown,
   Gauge,
   Play,
   ShieldAlert,
@@ -20,6 +22,7 @@ interface Props {
   onMode: (mode: SimulationMode) => void;
   onConcurrency: (limit: number | null) => void;
   onRun: () => void;
+  onExport: (baselineId?: string) => void;
 }
 
 const modes: { id: SimulationMode; label: string; sub: string }[] = [
@@ -41,7 +44,9 @@ export default function SimulationPanel({
   onMode,
   onConcurrency,
   onRun,
+  onExport,
 }: Props) {
+  const [baselineId, setBaselineId] = useState("");
   const criticalNames = result.criticalPath
     .map((id) => project.nodes.find((node) => node.id === id)?.name)
     .filter(Boolean);
@@ -53,9 +58,17 @@ export default function SimulationPanel({
           <h1>时序推演</h1>
           <p>估算请求完成时间，找出预算被消耗在了哪里。</p>
         </div>
-        <button className="button button-primary" onClick={onRun}>
-          <Play size={15} fill="currentColor" /> 运行推演
-        </button>
+        <div className="heading-actions">
+          <button
+            className="button button-neutral"
+            onClick={() => onExport(baselineId || undefined)}
+          >
+            <FileDown size={15} /> 导出评审材料
+          </button>
+          <button className="button button-primary" onClick={onRun}>
+            <Play size={15} fill="currentColor" /> 运行推演
+          </button>
+        </div>
       </div>
       <div className="simulation-toolbar">
         <div className="mode-control">
@@ -96,6 +109,25 @@ export default function SimulationPanel({
             </select>
           </span>
         </label>
+        {project.scenarios.length > 0 && (
+          <label className="concurrency-control export-control">
+            <span className="toolbar-label">评审对比基准</span>
+            <span className="select-wrap">
+              <FileDown size={14} />
+              <select
+                value={baselineId}
+                onChange={(event) => setBaselineId(event.target.value)}
+              >
+                <option value="">仅当前链路</option>
+                {project.scenarios.map((scenario) => (
+                  <option key={scenario.id} value={scenario.id}>
+                    对比：{scenario.name}
+                  </option>
+                ))}
+              </select>
+            </span>
+          </label>
+        )}
         <div className="model-note">
           <CircleHelp size={14} /> 确定性估算，不发送真实请求
         </div>

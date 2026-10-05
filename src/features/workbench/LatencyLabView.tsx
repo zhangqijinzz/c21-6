@@ -158,6 +158,7 @@ export default function LatencyLabView() {
               onRun={() => {
                 vm.simulate(vm.mode);
               }}
+              onExport={vm.exportProjectReview}
             />
           )}
           {vm.module === "scenarios" && (
@@ -166,6 +167,14 @@ export default function LatencyLabView() {
               onSave={vm.saveSnapshot}
               onRemove={vm.removeSavedScenario}
               onRestore={vm.restoreSavedScenario}
+              onExportScenario={vm.exportScenarioReview}
+              onExportComparison={() => {
+                if (vm.comparisonScenario)
+                  vm.exportScenarioReview(
+                    vm.comparisonScenario.id,
+                    vm.baselineScenario?.id,
+                  );
+              }}
               baseline={vm.baselineScenario}
               comparison={vm.comparisonScenario}
               comparisonResult={vm.scenarioComparison}

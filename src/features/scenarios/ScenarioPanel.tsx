@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
+  FileDown,
   GitCompareArrows,
   Plus,
   RotateCcw,
@@ -18,6 +19,8 @@ interface Props {
   onSave: (name: string) => boolean;
   onRemove: (id: string) => void;
   onRestore: (id: string) => void;
+  onExportScenario: (id: string) => void;
+  onExportComparison: () => void;
   baseline?: ScenarioSnapshot;
   comparison?: ScenarioSnapshot;
   comparisonResult?: ScenarioComparison;
@@ -36,6 +39,8 @@ export default function ScenarioPanel({
   onSave,
   onRemove,
   onRestore,
+  onExportScenario,
+  onExportComparison,
   baseline,
   comparison,
   comparisonResult,
@@ -155,6 +160,21 @@ export default function ScenarioPanel({
               </article>
             </div>
           )}
+          {baseline && comparison && (
+            <div className="compare-export">
+              <span>
+                <FileDown size={14} /> 将「{comparison.name}」与基准「
+                {baseline.name}
+                」的差异整理为只读评审材料，对方无需安装工具即可离线查看。
+              </span>
+              <button
+                className="button button-neutral"
+                onClick={onExportComparison}
+              >
+                <FileDown size={14} /> 导出对照评审
+              </button>
+            </div>
+          )}
           <div className="snapshot-list">
             <div className="snapshot-heading">
               <span className="section-label">已保存快照</span>
@@ -181,6 +201,14 @@ export default function ScenarioPanel({
                 <b className="snapshot-time">
                   {formatDuration(scenario.completionMs)}
                 </b>
+                <button
+                  className="icon-button"
+                  title="导出此方案的评审材料"
+                  aria-label={`导出方案 ${scenario.name} 的评审材料`}
+                  onClick={() => onExportScenario(scenario.id)}
+                >
+                  <FileDown size={14} />
+                </button>
                 <button
                   className="icon-button"
                   title="恢复此方案"

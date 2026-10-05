@@ -28,6 +28,12 @@ import {
 } from "../scenarios/scenarioViewModel";
 import { removeProject, updateProject } from "../projects/projectViewModel";
 import { simulateProject } from "../../shared/domain/simulation";
+import { downloadTextFile } from "../../shared/services/downloadService";
+import {
+  buildProjectReview,
+  buildScenarioReview,
+  type ReviewExportOutcome,
+} from "../review/reviewViewModel";
 
 export type LabStatus =
   "loading" | "ready" | "editing" | "simulating" | "error" | "completed";
@@ -266,6 +272,35 @@ export function useLatencyLab() {
     if (current) commit(current);
   }, [commit]);
 
+  const deliverReview = useCallback((outcome: ReviewExportOutcome) => {
+    if (outcome.ok) {
+      downloadTextFile(outcome.fileName, outcome.html);
+      setNotice(
+        `评审材料已导出为 ${outcome.fileName}，内容固定为生成时刻的状态，之后的修改不会影响该文件。`,
+      );
+    } else {
+      setNotice(outcome.message);
+    }
+  }, []);
+
+  const exportProjectReview = useCallback(
+    (baselineId?: string) => {
+      if (activeProject)
+        deliverReview(buildProjectReview(activeProject, mode, baselineId));
+    },
+    [activeProject, deliverReview, mode],
+  );
+
+  const exportScenarioReview = useCallback(
+    (scenarioId: string, baselineId?: string) => {
+      if (activeProject)
+        deliverReview(
+          buildScenarioReview(activeProject, scenarioId, mode, baselineId),
+        );
+    },
+    [activeProject, deliverReview, mode],
+  );
+
   return {
     document,
     activeProject,
@@ -295,6 +330,8 @@ export function useLatencyLab() {
     removeSavedScenario,
     restoreSavedScenario,
     retrySave,
+    exportProjectReview,
+    exportScenarioReview,
     scenarioList,
     baselineScenario,
     comparisonScenario,
