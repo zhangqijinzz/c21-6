@@ -32,7 +32,7 @@ import { simulateProject } from "../../shared/domain/simulation";
 export type LabStatus =
   "loading" | "ready" | "editing" | "simulating" | "error" | "completed";
 export type LabModule =
-  "projects" | "graph" | "simulation" | "scenarios" | "archive";
+  "projects" | "graph" | "simulation" | "scenarios" | "review" | "archive";
 
 export function useLatencyLab() {
   const repository = useMemo(() => new ProjectRepository(), []);

@@ -2,6 +2,7 @@ import {
   Activity,
   Archive,
   Boxes,
+  FileLock2,
   GitBranch,
   GitCompareArrows,
   Plus,
@@ -15,6 +16,7 @@ import ProjectsPanel from "../projects/ProjectsPanel";
 import GraphEditor from "../graph-editor/GraphEditor";
 import SimulationPanel from "../simulation/SimulationPanel";
 import ScenarioPanel from "../scenarios/ScenarioPanel";
+import ReviewPanel from "../review/ReviewPanel";
 import ArchivePanel from "../archive/ArchivePanel";
 import Sidebar, { type NavigationItem } from "./Sidebar";
 
@@ -32,6 +34,12 @@ const navigation: NavigationItem[] = [
     label: "方案对比",
     sublabel: "SCENARIOS",
     icon: GitCompareArrows,
+  },
+  {
+    id: "review",
+    label: "评审导出",
+    sublabel: "REVIEW EXPORT",
+    icon: FileLock2,
   },
   {
     id: "archive",
@@ -176,6 +184,9 @@ export default function LatencyLabView() {
                 vm.selectComparisonScenario("comparisonId", id)
               }
             />
+          )}
+          {vm.module === "review" && (
+            <ReviewPanel project={active} currentMode={vm.mode} />
           )}
           {vm.module === "archive" && (
             <ArchivePanel

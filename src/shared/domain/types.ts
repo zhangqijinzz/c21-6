@@ -18,6 +18,8 @@ export interface ScenarioSnapshot {
   nodes: RequestNode[];
   completionMs: number;
   criticalPath: string[];
+  /** 保存该快照时使用的波动情境；早期快照可能没有记录。 */
+  mode?: SimulationMode;
 }
 
 export interface LatencyProject {
